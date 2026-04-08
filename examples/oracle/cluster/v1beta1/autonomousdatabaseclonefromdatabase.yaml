@@ -10,12 +10,12 @@ metadata:
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     adminPasswordSecretRef:
       key: example-key
       name: example-secret
-      namespace: upbound-system
     allowedIpAddresses: []
     autoScalingEnabled: false
     autoScalingForStorageEnabled: true
@@ -29,7 +29,7 @@ spec:
     databaseWorkload: OLTP
     displayName: ExampleClone
     licenseModel: LicenseIncluded
-    location: West Europe
+    location: eastus
     mtlsConnectionRequired: true
     nationalCharacterSet: AL16UTF16
     resourceGroupNameSelector:
@@ -38,9 +38,10 @@ spec:
     sourceAutonomousDatabaseIdSelector:
       matchLabels:
         testing.upbound.io/example-name: example
-
+    subnetIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 ---
-
 apiVersion: oracle.azure.upbound.io/v1beta1
 kind: AutonomousDatabase
 metadata:
@@ -49,12 +50,12 @@ metadata:
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     adminPasswordSecretRef:
       key: example-key
       name: example-secret
-      namespace: upbound-system
     allowedIps: []
     autoScalingEnabled: false
     autoScalingForStorageEnabled: true
@@ -73,9 +74,52 @@ spec:
     resourceGroupNameSelector:
       matchLabels:
         testing.upbound.io/example-name: example
-
+    subnetIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 ---
-
+apiVersion: network.azure.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oracle/v1beta1/autonomousdatabase
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+  namespace: upbound-system
+spec:
+  forProvider:
+    addressPrefixes:
+      - 10.0.2.0/24
+    delegation:
+      - name: oracle
+        serviceDelegation:
+          - name: Oracle.Database/networkAttachments
+    resourceGroupNameSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    virtualNetworkNameSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+---
+apiVersion: network.azure.upbound.io/v1beta1
+kind: VirtualNetwork
+metadata:
+  annotations:
+    meta.upbound.io/example-id: oracle/v1beta1/autonomousdatabase
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+  namespace: upbound-system
+spec:
+  forProvider:
+    addressSpace:
+      - 10.0.0.0/16
+    location: West Europe
+    resourceGroupNameSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+---
 apiVersion: azure.upbound.io/v1beta1
 kind: ResourceGroup
 metadata:
@@ -84,6 +128,7 @@ metadata:
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     location: eastus

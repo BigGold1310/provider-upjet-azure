@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2025 The Crossplane Authors <https://crossplane.io>
 #
 # SPDX-License-Identifier: CC0-1.0
-
 apiVersion: oracle.azure.upbound.io/v1beta1
 kind: AutonomousDatabase
 metadata:
@@ -10,42 +9,42 @@ metadata:
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     adminPasswordSecretRef:
       key: example-key
       name: example-secret
-      namespace: upbound-system
-    autoScalingEnabled: example
+    autoScalingEnabled: false
     autoScalingForStorageEnabled: false
-    backupRetentionPeriodInDays: 42
-    characterSet: example
-    computeCount: 1.23456
-    computeModel: example
-    data_storage_size_in_gbs: 42
-    dbVersion: example
-    dbWorkload: example
+    backupRetentionPeriodInDays: 1
+    characterSet: AL32UTF8
+    computeCount: 2
+    computeModel: ECPU
+    dataStorageSizeInTbs: 1
+    dbVersion: "19c"
+    dbWorkload: OLTP
     displayName: example
-    licenseModel: false
+    licenseModel: LicenseIncluded
     location: West Europe
     mtlsConnectionRequired: false
-    nationalCharacterSet: example
+    nationalCharacterSet: AL16UTF16
     resourceGroupNameSelector:
       matchLabels:
         testing.upbound.io/example-name: example
     subnetIdSelector:
       matchLabels:
         testing.upbound.io/example-name: example
-    virtualNetworkId: example
 ---
 apiVersion: azure.upbound.io/v1beta1
 kind: ResourceGroup
 metadata:
   annotations:
-    meta.upbound.io/example-id: dbforpostgresql/v1beta2/flexibleserver
+    meta.upbound.io/example-id: oracle/v1beta1/autonomousdatabase
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     location: West Europe
@@ -54,10 +53,11 @@ apiVersion: network.azure.upbound.io/v1beta1
 kind: Subnet
 metadata:
   annotations:
-    meta.upbound.io/example-id: dbforpostgresql/v1beta2/flexibleserver
+    meta.upbound.io/example-id: oracle/v1beta1/autonomousdatabase
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     addressPrefixes:
@@ -65,12 +65,10 @@ spec:
     delegation:
       - name: oracle
         serviceDelegation:
-          name: Oracle.Database/networkAttachments
+          - name: Oracle.Database/networkAttachments
     resourceGroupNameSelector:
       matchLabels:
         testing.upbound.io/example-name: example
-    serviceEndpoints:
-      - Microsoft.Storage
     virtualNetworkNameSelector:
       matchLabels:
         testing.upbound.io/example-name: example
@@ -79,10 +77,11 @@ apiVersion: network.azure.upbound.io/v1beta1
 kind: VirtualNetwork
 metadata:
   annotations:
-    meta.upbound.io/example-id: dbforpostgresql/v1beta2/flexibleserver
+    meta.upbound.io/example-id: oracle/v1beta1/autonomousdatabase
   labels:
     testing.upbound.io/example-name: example
   name: example
+  namespace: upbound-system
 spec:
   forProvider:
     addressSpace:
