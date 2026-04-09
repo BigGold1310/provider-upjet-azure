@@ -16,6 +16,7 @@ spec:
     adminPasswordSecretRef:
       key: example-key
       name: example-secret
+      namespace: upbound-system
     allowedIpAddresses: []
     autoScalingEnabled: false
     autoScalingForStorageEnabled: true
@@ -53,6 +54,7 @@ spec:
     adminPasswordSecretRef:
       key: password
       name: example-db-secret
+      namespace: upbound-system
     autoScalingEnabled: false
     autoScalingForStorageEnabled: false
     backupRetentionPeriodInDays: 60
@@ -104,7 +106,7 @@ spec:
     type: LongTerm
     retentionPeriodInDays: 120
 ---
-apiVersion: network.azure.upbound.io/v1beta1
+apiVersion: network.azure.upbound.io/v1beta2
 kind: Subnet
 metadata:
   annotations:

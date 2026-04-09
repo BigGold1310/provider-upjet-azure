@@ -33,6 +33,7 @@ spec:
     adminPasswordSecretRef:
       key: password
       name: example-db-secret
+      namespace: upbound-system
     autoScalingEnabled: false
     autoScalingForStorageEnabled: false
     backupRetentionPeriodInDays: 60
@@ -54,7 +55,7 @@ spec:
       matchLabels:
         testing.upbound.io/example-name: example
 ---
-apiVersion: network.azure.upbound.io/v1beta1
+apiVersion: network.azure.upbound.io/v1beta2
 kind: Subnet
 metadata:
   annotations:
